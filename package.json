@@ -1,0 +1,17 @@
+{
+  "name": "scrap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "cheerio": "^1.0.0-rc.10",
+    "qs": "^6.10.3",
+    "queue-fifo": "^0.2.6"
+  }
+}
