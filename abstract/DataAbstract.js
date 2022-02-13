@@ -18,6 +18,10 @@ class DataDto {
 
     ville
 
+    get toCsv() {
+        return `"${this.id}";"${this.nom}";"${this.prenom}";"${this.numTel}";"${this.latitude}";"${this.longitude}";"${this.adresse}";"${this.codePostal}";"${this.ville}";`
+    }
+
 }
 
 module.exports = DataDto

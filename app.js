@@ -10,7 +10,7 @@ processQueue.push({
     data: qs.stringify(
         {
             'q': 'rue+de+la+paix',
-            'page': '2',
+            'page': '1',
             'type': '1' 
         })
 });
@@ -36,6 +36,7 @@ const AnnuCom = require('./annu.com.js');
         const client = new AnnuCom(cheerioParsedData)
         client.id = 1
         console.log(client)
+        console.log(client.toCsv)
         console.log(i, "-- finished")
     }
 })();
