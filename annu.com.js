@@ -13,8 +13,12 @@ class AnnuCom extends DataAbstract {
         this.nom = fullName[0]
         this.prenom = fullName[1]
         this.numTel = $('.phone').text().trim().match(/\d\d \d\d \d\d \d\d \d\d/)[0].replace(/ /gm, '')
-        this.adresse = $('.adr h2')[0]
+        this.adresse = $('.adr p')[0].children[0].data 
+        this.codePostal = $('.adr p')[0].children[2].data.match(/\d+/)[0]
+        this.ville = $('.adr p')[0].children[2].data.match(/[a-zA-Z]+/)[0]
     }
+
+
 
 }
 
