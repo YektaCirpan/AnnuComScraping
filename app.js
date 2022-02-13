@@ -3,8 +3,10 @@ const ProcessQueueService = require('./queue')
 const axios = require('axios')
 const cheerio = require('cheerio');
 const qs = require('qs');
-
 const processQueue = new ProcessQueueService();
+const { loadFile, getLineData } = require('./utils/readExcel');
+
+
 processQueue.push({
     url: "https://www.annu.com/includes/resultats.php",
     data: qs.stringify(
@@ -29,14 +31,19 @@ const headers = {
 const AnnuCom = require('./annu.com.js');
 
 (async() => {
-    for (let i = 0; i < 1; i++) {
-        console.log(i, "-- started")
-        const response = await axios({ method: "post", url, data, headers })
-        const cheerioParsedData = cheerio.load(response.data)
-        const client = new AnnuCom(cheerioParsedData)
-        client.id = 1
-        console.log(client)
-        console.log(client.toCsv)
-        console.log(i, "-- finished")
-    }
+
+    // const worksheet = loadFile('annuaire000')
+    // console.log(worksheet)
+    // console.log(getLineData(worksheet, 1))
+
+    // for (let i = 0; i < 1; i++) {
+    //     console.log(i, "-- started")
+    //     const response = await axios({ method: "post", url, data, headers })
+    //     const cheerioParsedData = cheerio.load(response.data)
+    //     const client = new AnnuCom(cheerioParsedData)
+    //     client.id = 1
+    //     console.log(client)
+    //     console.log(client.toCsv)
+    //     console.log(i, "-- finished")
+    // }
 })();
