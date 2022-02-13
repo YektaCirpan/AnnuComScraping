@@ -1,10 +1,15 @@
 const xlsx = require('xlsx')
-const workbook = xlsx.readFile('./annuaire.xlsx')
-let worksheet = workbook.Sheets[workbook.SheetNames[0]]
 
 
+const loadFile = (filename) => {
+	return new Promise((resolve, reject) =>{
+		const workbook = xlsx.readFile(`./annuaires/${filename}.xlsx`)
+		const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+		resolve(worksheet)
+	})
+} 
+const getLineData = (worksheet,line) => {
 
-const getLineData = (line) => {
 	return {
 		id:  worksheet[`A${line}`].v,
 		lat: worksheet[`B${line}`].v,
@@ -17,4 +22,4 @@ const getLineData = (line) => {
 	}
 }
 
-module.exports = {getLineData}
+module.exports = {loadFile, getLineData}
