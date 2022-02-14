@@ -2,7 +2,7 @@ const xlsx = require('xlsx')
 
 const loadFile = (filename) => {
 	return new Promise((resolve, reject) =>{
-		const workbook = xlsx.readFile(`./annuaires/${filename}.xlsx`)
+		const workbook = xlsx.readFile(`./annuaires/${filename}.csv`)
 		const worksheet = workbook.Sheets[workbook.SheetNames[0]]
 		resolve({worksheet, workbook})
 	})

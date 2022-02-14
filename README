@@ -1,2 +1,11 @@
 pour split un CSV en plusieurs fichiers par taille
 split -a 3 -b 10m -d ANNUAIRE  ANNUAIRE.csv
+
+
+Exemple pour tester la fonction getLineData dans utils/readExcel.js
+
+const test = async() =>  {
+	const {worksheet, workbook} = await loadFile('ANNUAIRE 1-5')
+	const line = getLineData(worksheet, 2)
+	console.log(line)
+}
