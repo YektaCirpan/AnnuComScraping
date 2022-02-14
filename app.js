@@ -32,7 +32,7 @@ const AnnuCom = require('./annu.com.js');
 
 (async() => {
 
-    // const worksheet = loadFile('annuaire000')
+    // const {worksheet} = await loadFile('annuaire000')
     // console.log(worksheet)
     // console.log(getLineData(worksheet, 1))
 
