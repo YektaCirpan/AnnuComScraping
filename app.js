@@ -6,18 +6,6 @@ const qs = require('qs');
 const processQueue = new ProcessQueueService();
 const { loadFile, getLineData } = require('./utils/readExcel');
 
-
-processQueue.push({
-    url: "https://www.annu.com/includes/resultats.php",
-    data: qs.stringify(
-        {
-            'q': 'rue+de+la+paix',
-            'page': '1',
-            'type': '1' 
-        })
-});
-
-const { url, data } = processQueue.get()[0]
 const headers = {
     'Connection': 'keep-alive', 
     'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"', 
@@ -32,9 +20,38 @@ const AnnuCom = require('./annu.com.js');
 
 (async() => {
 
-    // const {worksheet} = await loadFile('annuaire000')
-    // console.log(worksheet)
-    // console.log(getLineData(worksheet, 1))
+    const request = {
+        url: "https://www.annu.com/includes/resultats.php",
+        data: qs.stringify(
+            {
+                'q': 'rue+de+la+paix',
+                'page': '1',
+                'type': '1' 
+            })
+    }
+
+    const { worksheet } = await loadFile('annuaire000')
+    let line = 1
+
+    while (true) {
+        try {
+            let { houseNumber, address, postalCode, city } = getLineData(worksheet, line)
+            request.data = qs.stringify({
+                'q': `${houseNumber} ${address} ${postalCode} ${city}`,
+                'page': '1',
+                'type': '1' 
+            });
+            processQueue.push(request);
+            line++; 
+        } catch (error) {
+            console.log(error)
+            break;
+        }
+    }
+
+
+    // const { url, data } = processQueue.get()[0]
+
 
     // for (let i = 0; i < 1; i++) {
     //     console.log(i, "-- started")

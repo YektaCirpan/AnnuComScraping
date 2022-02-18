@@ -2,13 +2,13 @@ const xlsx = require('xlsx')
 
 const loadFile = (filename) => {
 	return new Promise((resolve, reject) =>{
-		const workbook = xlsx.readFile(`./annuaires/${filename}.csv`)
+		const workbook = xlsx.readFile(`./annuaires/${filename}`)
 		const worksheet = workbook.Sheets[workbook.SheetNames[0]]
 		resolve({worksheet, workbook})
 	})
 } 
 
-const getLineData = (worksheet,line) => {
+const getLineData = (worksheet, line) => {
 	return {
 		id:  worksheet[`A${line}`].v,
 		lat: worksheet[`B${line}`].v,
