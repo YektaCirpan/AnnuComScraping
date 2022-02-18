@@ -10,13 +10,13 @@ const loadFile = (filename) => {
 
 const getLineData = (worksheet, line) => {
 	return {
-		id:  worksheet[`A${line}`].v,
-		lat: worksheet[`B${line}`].v,
+		id:  worksheet[`A${line}`]?.v,
+		lat: worksheet[`B${line}`]?.v,
 		lon: worksheet[`C${line}`].v,
-		houseNumber: worksheet[`D${line}`].v,
-		address: worksheet[`E${line}`].v,
-		postalCode: worksheet[`F${line}`].v,
-		city: worksheet[`G${line}`].v,
+		houseNumber: worksheet[`D${line}`]?.v,
+		address: worksheet[`E${line}`]?.v,
+		postalCode: worksheet[`F${line}`]?.v,
+		city: worksheet[`G${line}`]?.v,
 	}
 }
 

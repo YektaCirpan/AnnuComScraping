@@ -5,6 +5,7 @@ const cheerio = require('cheerio');
 const qs = require('qs');
 const processQueue = new ProcessQueueService();
 const { loadFile, getLineData } = require('./utils/readExcel');
+const { getAddress } = require('./services/geolocation.api');
 
 const headers = {
     'Connection': 'keep-alive', 
@@ -36,12 +37,28 @@ const AnnuCom = require('./annu.com.js');
     while (true) {
         try {
             let { houseNumber, address, postalCode, city, lat, lon } = getLineData(worksheet, line)
-            request.data = qs.stringify({
-                'q': `${houseNumber} ${address} ${postalCode}`,
-                'page': '1',
-                'type': '1' 
-            });
-			request.position = { houseNumber, address, postalCode, city, lat, lon }
+            // il faut enlevé les accents et les ^
+			if(!!houseNumber && !!address && !!postalCode && !!city) {
+				request.data = qs.stringify({
+					'q': `${houseNumber} ${address} ${postalCode} ${city}`,
+					'page': '1',
+					'type': '1' 
+				});
+
+				request.position = { houseNumber, address, postalCode, city, lat, lon }
+
+			} else {
+				const address = await getAddress(lat, lon)
+				request.data = qs.stringify({
+					'q': address,
+					'page': '1',
+					'type': '1' 
+				});
+
+				request.position = { address, lat, lon }
+
+			}
+			
             processQueue.push(request);
             if(line === 20) break;
             line++; 
