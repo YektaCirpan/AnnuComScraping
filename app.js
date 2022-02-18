@@ -89,7 +89,7 @@ const AnnuCom = require('./annu.com.js');
         console.log(i, "-- started")
         console.log(processQueue.get()[0])
         const { url, data, position } = processQueue.get()[0]
-        const response = await axios({ method: "post", url, data, headers, ...proxy })
+        const response = await axios({ method: "post", url, data, headers, proxy })
         console.log(response.data)
         const cheerioParsedData = cheerio.load(response.data)
         const client = new AnnuCom({$: cheerioParsedData })
