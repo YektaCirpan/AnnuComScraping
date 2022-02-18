@@ -42,6 +42,7 @@ const AnnuCom = require('./annu.com.js');
                 'type': '1' 
             });
             processQueue.push(request);
+            if(line === 20) break;
             line++; 
         } catch (error) {
             console.log(error)
@@ -49,6 +50,23 @@ const AnnuCom = require('./annu.com.js');
         }
     }
 
+    let i = 0
+    while(processQueue.count()) {
+        console.log(i, "-- started")
+        const { url, data } = processQueue.get()[i]
+        const response = await axios({ method: "post", url, data, headers })
+        console.log(response.data)
+        const cheerioParsedData = cheerio.load(response.data)
+        const client = new AnnuCom(cheerioParsedData)
+        client.id = 1
+        console.log(client)
+        console.log(client.toCsv)
+        console.log(i, "-- finished")
+        i++
+        processQueue.pop()
+    }
+
+    console.log('imhere')
 
     // const { url, data } = processQueue.get()[0]
 
