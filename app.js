@@ -35,12 +35,13 @@ const AnnuCom = require('./annu.com.js');
 
     while (true) {
         try {
-            let { houseNumber, address, postalCode, city } = getLineData(worksheet, line)
+            let { houseNumber, address, postalCode, city, lat, lon } = getLineData(worksheet, line)
             request.data = qs.stringify({
-                'q': `${houseNumber} ${address} ${postalCode} ${city}`,
+                'q': `${houseNumber} ${address} ${postalCode}`,
                 'page': '1',
                 'type': '1' 
             });
+			request.position = { houseNumber, address, postalCode, city, lat, lon }
             processQueue.push(request);
             if(line === 20) break;
             line++; 
@@ -53,11 +54,11 @@ const AnnuCom = require('./annu.com.js');
     let i = 0
     while(processQueue.count()) {
         console.log(i, "-- started")
-        const { url, data } = processQueue.get()[i]
+        const { url, data, position } = processQueue.get()[i]
         const response = await axios({ method: "post", url, data, headers })
         console.log(response.data)
         const cheerioParsedData = cheerio.load(response.data)
-        const client = new AnnuCom(cheerioParsedData)
+        const client = new AnnuCom(cheerioParsedData, position)
         client.id = 1
         console.log(client)
         console.log(client.toCsv)

@@ -11,6 +11,8 @@
   "dependencies": {
     "axios": "^0.26.0",
     "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^16.0.0",
+    "opencage-api-client": "^1.0.0",
     "qs": "^6.10.3",
     "queue-fifo": "^0.2.6",
     "xlsx": "^0.18.0"
