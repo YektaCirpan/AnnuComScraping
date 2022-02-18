@@ -7,6 +7,20 @@ const processQueue = new ProcessQueueService();
 const { loadFile, getLineData } = require('./utils/readExcel');
 const { getAddress } = require('./services/geolocation.api');
 
+const username = 'lum-customer-hl_b10ca24f-zone-zone1';
+const password = 'mwq0xb5l351n';
+const port = 22225;
+const session_id = (1000000 * Math.random())|0;
+
+const proxy = {
+    auth: {
+        username: username+'-session-'+session_id,
+        password
+    },
+    host: 'zproxy.lum-superproxy.io',
+    port
+};
+
 const headers = {
     'Connection': 'keep-alive', 
     'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"', 
@@ -48,14 +62,16 @@ const AnnuCom = require('./annu.com.js');
 				request.position = { houseNumber, address, postalCode, city, lat, lon }
 
 			} else {
-				const address = await getAddress(lat, lon)
+				const responseAddress = await getAddress(lat, lon)
+                const { house_number, street, city, postcode } = responseAddress?.components
 				request.data = qs.stringify({
 					'q': address,
 					'page': '1',
 					'type': '1' 
 				});
 
-				request.position = { address, lat, lon }
+
+				request.position = { houseNumber: house_number, address: street, postalCode: postcode, city, lat, lon }
 
 			}
 			
@@ -71,11 +87,13 @@ const AnnuCom = require('./annu.com.js');
     let i = 0
     while(processQueue.count()) {
         console.log(i, "-- started")
-        const { url, data, position } = processQueue.get()[i]
-        const response = await axios({ method: "post", url, data, headers })
+        console.log(processQueue.get()[0])
+        const { url, data, position } = processQueue.get()[0]
+        const response = await axios({ method: "post", url, data, headers, ...proxy })
         console.log(response.data)
         const cheerioParsedData = cheerio.load(response.data)
-        const client = new AnnuCom(cheerioParsedData, position)
+        const client = new AnnuCom({$: cheerioParsedData })
+        client.setAdresse = position
         client.id = 1
         console.log(client)
         console.log(client.toCsv)
