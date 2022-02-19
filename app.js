@@ -1,25 +1,22 @@
 // const AxiosService = require('./axios')
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+
 const ProcessQueueService = require('./queue')
-const axios = require('axios')
+const axios = require('axios-https-proxy-fix')
 const cheerio = require('cheerio');
 const qs = require('qs');
 const processQueue = new ProcessQueueService();
 const { loadFile, getLineData } = require('./utils/readExcel');
 const { getAddress } = require('./services/geolocation.api');
 
-const username = 'lum-customer-hl_b10ca24f-zone-zone1';
-const password = 'mwq0xb5l351n';
-const port = 22225;
-const session_id = (1000000 * Math.random())|0;
-
 const proxy = {
-    auth: {
-        username: username+'-session-'+session_id,
-        password
-    },
     host: 'zproxy.lum-superproxy.io',
-    port
-};
+    port: '22225',
+    auth: {
+        username: 'lum-customer-hl_b10ca24f-zone-zone1',
+        password: 'mwq0xb5l351n'
+    }
+}
 
 const headers = {
     'Connection': 'keep-alive', 
